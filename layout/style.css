@@ -1,0 +1,131 @@
+label {
+  width: 75px;
+  display: inline-block;
+}
+
+hr {
+  border: 1px solid lightgrey;
+}
+
+.siteheader {
+  background-image: url("/bakgrunn/bakgrunn.jpg");
+  background-repeat: repeat-x;
+}
+
+.header h2 {
+  color: #666;
+}
+ 
+.answerfeedback {
+  border-radius: 5px;
+  padding: 10px;
+  min-height: 20px; 
+}
+.answercorrect {
+  background: #aea;
+}
+.answerwrong {
+  background: #fcc;
+}
+.taskcontent {
+  background: #eee;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  color: #333;
+}
+.taskcontent-subhead {
+  margin-top: 30px;
+  color: #333;
+}
+.taskextra {
+  background: #F1E5AC;
+}
+.taskcorrect {
+  background: #ded;
+}
+.overviewday {
+  position: relative;
+  text-align: center;
+  line-height: 0em;
+}
+.overviewday-text {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #960014;
+  font-size: min(3.5cqw, 50px);
+  font-weight: bold;
+  pointer-events: none;
+}
+.overviewday-solved {
+  filter: grayscale(100%);
+}
+.overviewday-img {
+  opacity: 0.7;
+}
+.overviewday-img:hover {
+  opacity: 1.0;
+}
+.overviewday-notask {
+  opacity: 0.2;
+}
+.overviewday-notask:hover {
+  opacity: 0.3;
+}
+.pure-table-me td {
+  background-color:#f7e7c7
+}
+.pure-table tfoot {
+  background-color:#e0e0e0;
+  color:#000;
+  text-align:left;
+  vertical-align:bottom
+}
+
+.Button {
+  width: 140px;
+  height: 50px;    
+  text-align: center;
+  cursor: pointer;
+  -webkit-user-select: none;
+  @include border-radius(6px);
+  @include box-sizing;
+  overflow: hidden;
+  
+  label {
+    position: relative;
+    top: 0;
+    background: #2f79e7;
+    font: bold 16px/50px $fontStack;
+    color: #FFF;
+    display: block;
+    cursor: pointer;
+    @include transition (top .7s cubic-bezier(0.860, 0.000, 0.070, 1.000));
+  
+    &:active {
+      @include box-shadow(0 1px 4px rgba(0,0,0,.5) inset);
+      @include transition (top .7s cubic-bezier(1.000, 0.860, 0.070, 0.000) 2s);
+    }
+    
+    &:last-child {
+      background: #1d5cb9;
+      
+      a {
+        text-decoration: none;
+        color: #FFF;
+        display: block;
+      }
+    }
+  }
+  
+  input {
+    position: absolute;
+    display: none;
+  }
+  
+  input:checked + label{
+    top: -50px;
+  }
+}
