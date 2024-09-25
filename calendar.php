@@ -229,8 +229,8 @@ if (!$logged_in)
                     <input type=\"hidden\" name=\"show_hint1\" value=\"1\">
                     <input type=\"hidden\" name=\"show_hint2\" value=\"1\">
                     <div style=\"display: grid;\">
-                      <button type=\"submit\" class=\"pure-button\" style=\"grid-column: 1; grid-row: 1; width: 150px; height: 40px;\">Helt sikker?</button>
-                      <button type=\"button\" class=\"pure-button\" style=\"grid-column: 1; grid-row: 1; width: 150px; height: 50px;\" onclick=\"this.hidden=true\">Vis hint 2</button>
+                      <button type=\"submit\" class=\"pure-button\" style=\"grid-column: 1; grid-row: 1; width: 150px; height: 40px; margin: 0;\">Helt sikker?</button>
+                      <button type=\"button\" class=\"pure-button\" style=\"grid-column: 1; grid-row: 1; width: 150px; height: 40px; margin: 0;\" onclick=\"this.hidden=true\">Vis hint 2</button>
                     </div>
                   </form>
 ";
@@ -241,8 +241,8 @@ if (!$logged_in)
         $content .= "              <form method=\"POST\" action=\"#hint1\" class=\"pure-form\">
                 <input type=\"hidden\" name=\"show_hint1\" value=\"1\">
                 <div style=\"display: grid;\">
-                  <button type=\"submit\" class=\"pure-button\" style=\"grid-column: 1; grid-row: 1; width: 150px; height: 40px;\">Helt sikker?</button>
-                  <button type=\"button\" class=\"pure-button\" style=\"grid-column: 1; grid-row: 1; width: 150px; height: 50px;\" onclick=\"this.hidden=true\">Vis hint 1</button>
+                  <button type=\"submit\" class=\"pure-button\" style=\"grid-column: 1; grid-row: 1; width: 150px; height: 40px; margin: 0;\">Helt sikker?</button>
+                  <button type=\"button\" class=\"pure-button\" style=\"grid-column: 1; grid-row: 1; width: 150px; height: 40px; margin: 0;\" onclick=\"this.hidden=true\">Vis hint 1</button>
                 </div>
               </form>
 ";

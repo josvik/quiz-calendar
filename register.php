@@ -23,14 +23,6 @@ if (isset($_POST['name']) && isset($_POST['email'])) {
   $typedname = $_POST['name'];
   $typedemail = $_POST['email'];
 
-  //$siteKey = '6Lf8fdUoAAAAAEVEcZ1qeJmSUttQKrWDFsfXGY2b'; // reCAPTCHA site key
-  //$secret = ''; // reCAPTCHA secret key
-  //$recaptchaResponse = sanitizeInput($_POST['g-recaptcha-response']);
-
-  //$recaptchaUrl = "https://www.google.com/recaptcha/api/siteverify?secret={$secret}&response={$recaptchaResponse
-  
-  //$verify = json_decode(file_get_contents($recaptchaUrl));
-  
   $name = sanitizeInput($_POST['name']);
   if (strlen(trim($name)) == 0)
     $errormessages[] = "Mangler brukernavn.";
@@ -95,7 +87,7 @@ else
       <label for="email">E-post</label>
       <input type="email" id="email" name="email" style="max-width:50%; display: inline-block; margin-right:15px" value="<?php echo $typedemail; ?>">
     </div>
-    <div class="g-recaptcha" data-sitekey="6Lf8fdUoAAAAAEVEcZ1qeJmSUttQKrWDFsfXGY2b" data-action="LOGIN"></div> 
+
     <br>
     <div>
       <button type="submit" style="left: 20%;position: relative;padding: 5px;">Send</button>

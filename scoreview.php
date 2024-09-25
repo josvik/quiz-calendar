@@ -15,9 +15,13 @@ if (!$logged_in)
   echo $not_logged_in_message;
   
 } else {
-  include("scoreboard.php");
-  echo "<br><br><br>";
-  include("mypoints.php");
+  if (isset($_GET['group']))
+    include("grouppoints.php");
+  else {
+    include("scoreboard.php");
+    echo "<br><br><br>";
+    include("mypoints.php");
+  }
 }
 ?>
         </div><!--class="content"-->

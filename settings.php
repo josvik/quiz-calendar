@@ -1,5 +1,5 @@
 <?php 
-  define('DATABASEFILE', 'example1.db');
+  define('DATABASEFILE', 'example.db');
   
   define('MAIL_HOST', 'mail.quiz-calendar.none');
   define('MAIL_USERNAME', 'post@quiz-calendar.none');
