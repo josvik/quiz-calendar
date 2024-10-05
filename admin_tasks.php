@@ -29,12 +29,14 @@ if (isset($_POST['day']) && isset($_POST['title']) && isset($_POST['release_time
   
   $savetask->description = $_POST['description'];
   $savetask->answer = $_POST['answer'];
+  $savetask->attempts = $_POST['attempts'];
   $savetask->hint1 = $_POST['hint1'];
   $savetask->hint2 = $_POST['hint2'];
   $savetask->hasextratask = isset($_POST['hasextratask']) && $_POST['hasextratask']="1";
   $savetask->descriptionextra = $_POST['descriptionextra'];
   $savetask->answerextra = $_POST['answerextra'];
   $savetask->valueextra = $_POST['valueextra'];
+  $savetask->attemptsextra = $_POST['attemptsextra'];
 
   $savetask->id = $_POST['taskid'];
   
@@ -74,6 +76,10 @@ if (isset($_GET['taskid']))
             <input type="number" id="value" name="value" value="<?php echo $task->value; ?>">
           </div>
           <div>
+            <label for="attempts">Forsøk</label>
+            <input type="number" id="attempts" name="attempts" value="<?php echo $task->attempts; ?>">
+          </div>
+          <div>
             <label for="hint1">Hint 1</label>
             <textarea id="hint1" name="hint1" rows="1" cols="53"><?php echo $task->hint1; ?></textarea>
           </div>
@@ -92,6 +98,10 @@ if (isset($_GET['taskid']))
             <input type="text" id="answerextra" name="answerextra" value="<?php echo $task->answerextra; ?>">
             <label for="valueextra">Verdi</label>
             <input type="number" id="valueextra" name="valueextra" value="<?php echo $task->valueextra; ?>">
+          </div>
+          <div>
+            <label for="attemptsextra">Forsøk</label>
+            <input type="number" id="attemptsextra" name="attemptsextra" value="<?php echo $task->attemptsextra; ?>">
           </div>
           <input type="hidden" name="taskid" value="<?php echo $task->id; ?>">
           <div>

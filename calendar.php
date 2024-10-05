@@ -9,6 +9,7 @@ if (!$logged_in)
   if (isset($_GET['dag']))
   {
     if (isset($_GET['overstyring']) && $is_admin)
+      //Admins can view any task if they add a GET 'overstyring'
       $task = R::findOne('task' , ' day like ? ', [urldecode($_GET['dag'])] );
     else
       $task = R::findOne('task' , ' day like ? AND release_time <= ?', [urldecode($_GET['dag']), time()] );
@@ -42,20 +43,47 @@ if (!$logged_in)
       }
       $task_answer->ipaddr = $_SERVER['REMOTE_ADDR'];
       $task_answer->useragent = $_SERVER['HTTP_USER_AGENT'];
-      
-      $disabled_answer = "";
-      $disabled_answerextra = "";
-      
+
+      // Calculate how many attempts are left
+      $attemptsextra = intval($task->attemptsextra);
+      $wronganswerscount = R::getRow('
+              SELECT SUM(CASE WHEN extratask IS NOT 1 THEN 1 ELSE 0 END) AS wronganswerscount, SUM(extratask) AS wronganswersextracount
+              FROM wronganswer
+              WHERE task_id = ?
+              AND user_id = ?'
+          , [ $task->id, $user_id ]);
+      $attemptsleft = max(intval($task->attempts) - intval($wronganswerscount['wronganswerscount']), 0);
+      $attemptsextraleft = max(intval($task->attemptsextra) - intval($wronganswerscount['wronganswersextracount']), 0);
+
       $content = "";
-      
-      if ($task->hasextratask && !empty($_POST['answerextra']) && $task_answer->correct_answer_time > 0) 
+
+      // If user submitted answer for extra task: check that the original task is answered first.
+      if ($task->hasextratask && !empty($_POST['answerextra']) && $task_answer->correct_answer_time > 0)
       {
         if ($task_answer->correct_answerextra_time > 0)
+        {
           $content .= "<div class=\"answerfeedback answercorrect\"><h3>Du har allerede svart korrekt på ekstraoppgaven</h3></div>";
-        
+        }
+        else if ($attemptsextraleft <= 0)
+        {
+          $content .= "<div class=\"answerfeedback answerwrong\"><h3>Du har brukt opp alle forsøkene på ekstraoppgaven</h3></div>";
+        }
         else 
         {
-          if (mb_strtolower(trim($_POST['answerextra']), 'UTF-8') === mb_strtolower($task->answerextra, 'UTF-8'))
+          $post_answerextra = trim($_POST['answerextra']);
+          $same_answer  = R::getCell( '
+              SELECT count(*)
+              FROM wronganswer
+              WHERE task_id = ?
+              AND user_id = ?
+              AND LOWER(wrong_answer) = LOWER(?)
+              AND extratask IS TRUE'
+              , [ $task->id, $user_id, $post_answerextra ]);
+          if ($same_answer > 0)
+          {
+            $content .= "<div class=\"answerfeedback\"><h3>Du har allerede forøkt dette svaret på ekstraoppgaven</h3></div>";
+          }
+          else if (mb_strtolower($post_answerextra, 'UTF-8') === mb_strtolower($task->answerextra, 'UTF-8'))
           {
             $task_answer->correct_answerextra_time = time();
             
@@ -69,41 +97,76 @@ if (!$logged_in)
             </div>";
           }
           else
+          {
+            $wrong_answer = R::dispense('wronganswer');
+            $wrong_answer->user_id = $user_id;
+            $wrong_answer->task_id = $task->id;
+            $wrong_answer->extratask = true;
+            $wrong_answer->wrong_answer = $post_answerextra;
+            $wrong_answer->wrong_time = time();
+            $wrong_answer->ipaddr = $_SERVER['REMOTE_ADDR'];
+            $wrong_answer->useragent = $_SERVER['HTTP_USER_AGENT'];
+            R::store($wrong_answer);
+            $attemptsextraleft -= 1;
             $content .= "<div class=\"answerfeedback answerwrong\"><h3>Feil svar!</h3></div>";
+          }
         }
       }
       else if (isset($_POST['answer']) && !empty($_POST['answer']))
       {
         if ($task_answer->correct_answer_time > 0)
-          $content .= "<div class=\"answerfeedback answercorrect\"><h3>Du har allerede svart korrekt på denne oppgaven</h3></div>";
-        
-        else if (mb_strtolower(trim($_POST['answer']), 'UTF-8') === mb_strtolower($task->answer, 'UTF-8'))
         {
-          $task_answer->correct_answer_time = time();
-          
-          $task_answer->score = $task->value;
-          if ($task_answer->show_hint2)
-            $task_answer->score = 0;
-          else if ($task_answer->show_hint1)
-            $task_answer->score = max($task_answer->score - 5, 0);
-          R::store($task_answer);
-
-          $content .= "
-          <div class=\"answerfeedback answercorrect\">
-            <h2>Korrekt!</h2>
-            <h3>Du fikk $task_answer->score poeng</h3>
-          </div>";
+          $content .= "<div class=\"answerfeedback answercorrect\"><h3>Du har allerede svart korrekt på denne oppgaven</h3></div>";
         }
-        else{
-          $wrong_answer = R::dispense('wronganswer');
-          $wrong_answer->user_id = $user_id;
-          $wrong_answer->task_id = $task->id;
-          $wrong_answer->wrong_answer = $_POST['answer'];
-          $wrong_answer->wrong_time = time();
-          $wrong_answer->ipaddr = $_SERVER['REMOTE_ADDR'];
-          $wrong_answer->useragent = $_SERVER['HTTP_USER_AGENT'];
-          R::store($wrong_answer);
-          $content .= "<div class=\"answerfeedback answerwrong\"><h3>Feil svar!</h3></div>";
+        else if ($attemptsleft <= 0)
+        {
+          $content .= "<div class=\"answerfeedback answerwrong\"><h3>Du har brukt opp alle forsøkene på denne oppgaven</h3></div>";
+        }
+        else {
+          $post_answer = trim($_POST['answer']);
+          $same_answer  = R::getCell( '
+              SELECT count(*)
+              FROM wronganswer
+              WHERE task_id = ?
+              AND user_id = ?
+              AND LOWER(wrong_answer) = LOWER(?)
+              AND extratask IS NOT TRUE'
+              , [ $task->id, $user_id, $post_answer ]);
+          if ($same_answer > 0)
+          {
+            $content .= "<div class=\"answerfeedback\"><h3>Du har allerede forøkt dette svaret på oppgaven</h3></div>";
+          }
+          else if (mb_strtolower(trim($_POST['answer']), 'UTF-8') === mb_strtolower($task->answer, 'UTF-8'))
+          {
+            $task_answer->correct_answer_time = time();
+
+            $task_answer->score = $task->value;
+            if ($task_answer->show_hint2)
+              $task_answer->score = 0;
+            else if ($task_answer->show_hint1)
+              $task_answer->score = max($task_answer->score - 5, 0);
+            R::store($task_answer);
+
+            $content .= "
+            <div class=\"answerfeedback answercorrect\">
+              <h2>Korrekt!</h2>
+              <h3>Du fikk $task_answer->score poeng</h3>
+            </div>";
+          }
+          else
+          {
+            $wrong_answer = R::dispense('wronganswer');
+            $wrong_answer->user_id = $user_id;
+            $wrong_answer->task_id = $task->id;
+            $wrong_answer->extratask = false;
+            $wrong_answer->wrong_answer = $_POST['answer'];
+            $wrong_answer->wrong_time = time();
+            $wrong_answer->ipaddr = $_SERVER['REMOTE_ADDR'];
+            $wrong_answer->useragent = $_SERVER['HTTP_USER_AGENT'];
+            R::store($wrong_answer);
+            $attemptsleft -= 1;
+            $content .= "<div class=\"answerfeedback answerwrong\"><h3>Feil svar!</h3></div>";
+          }
         }
       }
       
@@ -125,36 +188,38 @@ if (!$logged_in)
       $taskcorrect = "";
       $disabled_answer = "";
       $disabled_answerextra = "";
-      if ($task_answer->correct_answer_time > 0)
+      if ($task_answer->correct_answer_time > 0 || $attemptsleft <= 0 )
       {
         $taskcorrect = "taskcorrect";
         $disabled_answer = "disabled";
       }
-      if ($task_answer->correct_answerextra_time > 0)
+      if ($task_answer->correct_answerextra_time > 0 || $attemptsextraleft <= 0 )
         $disabled_answerextra = "disabled";
       
       
       $content .= "<div class=\"header\"><h2>".$_GET['dag']."</h2>
           </div>\n";
 
-      if ($task_answer->correct_answer_time == 0 && !isset($_GET['extraoverstyring'])){
+      if ($task_answer->correct_answer_time == 0 && !isset($_GET['extraoverstyring']))
+      {
         $content .= "              <div style=\"float:right; text-align:right; padding: 1em;\">Verdi: $task_value poeng</div>";
       }
       else
       {
-        if ($task->hasextratask){
+        if ($task->hasextratask)
+        {
           $content .= "         <div style=\"float:right; text-align:right; padding: 1em;\">";
           if ($task_answer->correct_answerextra_time == 0){
             $content .= "Verdi: $task->valueextra poeng";
           } else {
             $content .= "Fullført ekstraoppgave!<br>";
-            $solvedcount = R::getCol( '
+            $solvedcount = R::getCell( '
               SELECT count(*)
               FROM taskanswer
               WHERE task_id = ? 
               AND user_id <> ?
               AND correct_answerextra_time > 0'
-              , [ $task->id, $user_id ])[0];
+              , [ $task->id, $user_id ]);
             if ($solvedcount > 0)
               $content .= $solvedcount . " andre har løst den";
             else
@@ -171,6 +236,7 @@ if (!$logged_in)
                 <label for=\"answerextra\" style=\"grid-column: 1; \">Ekstrasvar</label>
                 <input type=\"text\" id=\"answerextra\" name=\"answerextra\" style=\"grid-column: 2;\" $disabled_answerextra>
                 <button type=\"submit\" class=\"pure-button pure-button-primary\" style=\"grid-column: 3; margin: 0px;\" $disabled_answerextra>Svar</button>
+                <span style=\"grid-column: 2; text-align: right; margin: 0px; \">Du har $attemptsextraleft forsøk igjen</span>
               </div>
             </div>  
           </form>
@@ -183,13 +249,13 @@ if (!$logged_in)
         
         $content .= "              <div style=\"float:right; text-align:right; padding: 1em;\">\n";
         $content .= "Fullført oppgave!<br>";
-        $solvedcount = R::getCol( '
+        $solvedcount = R::getCell( '
           SELECT count(*)
           FROM taskanswer
           WHERE task_id = ? 
           AND user_id <> ?
           AND correct_answer_time > 0'
-          , [ $task->id, $user_id ])[0];
+          , [ $task->id, $user_id ]);
         
         if ($solvedcount > 0)
           $content .= $solvedcount . " andre har løst den";
@@ -197,7 +263,6 @@ if (!$logged_in)
           $content .= "<b>Ingen</b> andre har løst den!";
         $content .= "</div>\n";
       }
-      
       $content .= "          <div class=\"content taskcontent $taskcorrect\">
             <h2 class=\"content-subhead taskcontent-subhead\" style=\"margin-top: 2.8em; \">$task->title</h2>
             <p>$task->description</p>
@@ -208,6 +273,7 @@ if (!$logged_in)
                   <label for=\"answer\" style=\"grid-column: 1;\">Svar</label>
                   <input type=\"text\" id=\"answer\" name=\"answer\" style=\"grid-column: 2;\" $disabled_answer>
                   <button type=\"submit\" class=\"pure-button pure-button-primary\" style=\"grid-column: 3; margin: 0px; \" $disabled_answer>Svar</button>
+                  <span style=\"grid-column: 2; text-align: right; margin: 0px; \">Du har $attemptsleft forsøk igjen</span>
                 </div>
               </div>  
             </form>
