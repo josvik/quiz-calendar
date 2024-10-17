@@ -15,7 +15,8 @@ if (!$logged_in)
 
       <div class="content">
         <h2 class="content-subhead">Legg til oppgave</h2>
-<?php 
+<?php
+$uploadederror = "";
 if (isset($_POST['day']) && isset($_POST['title']) && isset($_POST['release_time']) && isset($_POST['hide_time']) && isset($_POST['description']) && isset($_POST['answer'])) {
   $savetask = R::dispense('task');
   
@@ -37,22 +38,38 @@ if (isset($_POST['day']) && isset($_POST['title']) && isset($_POST['release_time
   $savetask->answerextra = $_POST['answerextra'];
   $savetask->valueextra = $_POST['valueextra'];
   $savetask->attemptsextra = $_POST['attemptsextra'];
+  $savetask->foldername = $_POST['foldername'];
 
   $savetask->id = $_POST['taskid'];
-  
-  
-  R::store($savetask);
-}
-$task = R::dispense('task');
-$task->value = 10;
-$task->release_time = time();
-$task->hide_time = time() + 2678400;
 
-if (isset($_GET['taskid']))
+  R::store($savetask);
+
+  if(!empty($_FILES['uploaded_file']) && $savetask->foldername){
+    $path = $savetask->foldername . "/";
+    if (! is_dir($path)) {
+      mkdir($path);
+    }
+    $path = $path . basename( $_FILES['uploaded_file']['name']);
+
+    if(move_uploaded_file($_FILES['uploaded_file']['tmp_name'], $path)) {
+      $uploadederror = "";
+    } else {
+      $uploadederror = "En feil oppsto i lagring av filen '". basename( $_FILES['uploaded_file']['name']) . "', vennligst prøv på nytt.";
+    }
+  }
+}
+
+if (isset($_GET['taskid'])) {
   $task = R::load('task', $_GET['taskid']);
+} else {
+  $task = R::dispense('task');
+  $task->value = 10;
+  $task->release_time = time();
+  $task->hide_time = time() + 2678400;
+}
 ?>
 
-        <form method="POST" class="pure-form">
+        <form class="pure-form" method="post" enctype="multipart/form-data">
           <div>
             <label for="day">Dag</label>
             <input autofocus type="text" id="day" name="day" value="<?php echo $task->day; ?>">
@@ -103,9 +120,46 @@ if (isset($_GET['taskid']))
             <label for="attemptsextra">Forsøk</label>
             <input type="number" id="attemptsextra" name="attemptsextra" value="<?php echo $task->attemptsextra; ?>">
           </div>
+          <?php
+          $foldername = $task->foldername;
+          if (! $foldername) {
+            $foldernameseed = sha1(time());
+            $foldername = "t" . substr($foldernameseed, 0, 4) . "-" . substr($foldernameseed, 20, 5) . "-" . substr($foldernameseed, -5);
+          }
+          ?>
+          <div>
+            <label for="foldername">Mappe</label>
+            <input type="text" id="foldername" name="foldername" value="<?php echo $foldername; ?>" <?php if (is_dir($foldername)) print("readonly"); ?> >
+
+            <label for="uploaded_file">Last opp</label>
+            <input type="file" id="uploaded_file" name="uploaded_file">
+          </div>
+          <?php print($uploadederror); ?>
+          <div>
+            <label style="vertical-align: top;">Filer i mappen</label>
+            <label style="width: 80%;">
+              <?php
+                $path = $foldername . "/";
+                if (is_dir($path)) {
+                  $filesindir = "";
+                  $files = scandir($path);
+                  $files = array_diff($files, array('.', '..'));
+                  foreach ($files as $file) {
+                    print("<a href=\"" . $path . $file . "\">" . $path . $file. "</a><br>");
+                  }
+                } else {
+                  print("(Mappen er ikke opprettet enda)");
+                }
+                print($filesindir);
+              ?>
+            </label>
+          </div>
+
+          <br>
+
           <input type="hidden" name="taskid" value="<?php echo $task->id; ?>">
           <div>
-            <button type="submit" style="padding: 5px;">Send</button>
+            <button type="submit" style="padding: 5px;">Lagre</button>
           </div>
         </form>
         <br><br>
