@@ -44,7 +44,7 @@ if (isset($_POST['day']) && isset($_POST['title']) && isset($_POST['release_time
 
   R::store($savetask);
 
-  if(!empty($_FILES['uploaded_file']) && $savetask->foldername){
+  if(!empty($_FILES['uploaded_file']) && $_FILES['uploaded_file']['name'] != "" && $savetask->foldername){
     $path = $savetask->foldername . "/";
     if (! is_dir($path)) {
       mkdir($path);
@@ -141,7 +141,6 @@ if (isset($_GET['taskid'])) {
               <?php
                 $path = $foldername . "/";
                 if (is_dir($path)) {
-                  $filesindir = "";
                   $files = scandir($path);
                   $files = array_diff($files, array('.', '..'));
                   foreach ($files as $file) {
@@ -150,7 +149,6 @@ if (isset($_GET['taskid'])) {
                 } else {
                   print("(Mappen er ikke opprettet enda)");
                 }
-                print($filesindir);
               ?>
             </label>
           </div>
