@@ -4,7 +4,7 @@
 if (isset($logged_in) && $logged_in) 
 {
   $scoreboard = R::getAll( '
-        SELECT SUM(score) AS totalscore, MAX(correct_answer_time) AS lastanswertime, COUNT(correct_answer_time) as tasks, COUNT(correct_answerextra_time) as extratasks, user_id
+        SELECT SUM(score) AS totalscore, MAX(correct_answer_time) AS lastanswertime, COUNT(CASE WHEN correct_answer_time > 0 THEN 1 END) as tasks, COUNT(CASE WHEN correct_answerextra_time > 0 THEN 1 END) as extratasks, user_id
         FROM taskanswer
         GROUP BY user_id
         ORDER BY totalscore DESC, lastanswertime ASC
