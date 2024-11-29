@@ -23,7 +23,9 @@ if (isset($_GET['authtoken']) && isset($_GET['email'])) {
     
     setcookie('token', $_GET['authtoken'], time()+3600*24*30);
     $baseurl = getBaseUrl();
-    $newpage = $baseurl . "calendar.php";
+    $newpage = $baseurl;
+    if (isset($_GET["joingroup"]))
+        $newpage = $baseurl . "profile.php?joingroup=" . $_GET["joingroup"];
     header('Location: ' . $newpage);
   }
 } else {

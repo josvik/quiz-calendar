@@ -9,11 +9,17 @@
             <h2><?php echo $page_subtitle; ?></h2>
         </div>
         <div class="content">
-          <div style="display: inline-block;">
-            <h2 class="content-subhead">Profil</h2>
-          </div>
-<?php 
+<?php
+if (!$logged_in)
+{
+  print($not_logged_in_message);
+} else {
+?>
+      <div style="display: inline-block;">
+        <h2 class="content-subhead">Profil</h2>
+      </div>
 
+<?php
 $name = null;
 $email = null;
 
@@ -100,8 +106,8 @@ if (isset($_POST["savegroup"])) {
         }
     }
     R::store($user);
-} else if (isset($_POST["joingroup"]) && isset($_POST["groupid"])) {
-    $group = R::load( 'group', $_POST["groupid"]);
+} else if ( isset($_GET["joingroup"])) {
+    $group = R::load( 'group', $_GET["joingroup"]);
     $user->sharedGroupList[] = $group;
     R::store($user);
 }
@@ -117,13 +123,14 @@ if ($user->sharedGroupList) {
         $useringroups[] = $group->id;
         print("          <div style=\"padding-bottom: 38px;\"> ");
         print("          <h3 style=\"/*! display: inline; */ margin-bottom: 0;\">" . $group->name . "</h3>");
-        print("          <a style=\"/*! float: right; */\" href=\"scoreview.php?group=" . $group->id . "\">Poengoversikt</a>");
+        print("          <a style=\"/*! float: right; */\" href=\"scoreview.php?group=" . $group->id . "\">Poengoversikt</a><br>");
+        print("          Invitasjonslenke: <nobr>" . getBaseUrl() . "profile.php?joingroup=" . $group->id . "</nobr>");
 ?>
           <form method="POST" class="pure-form">
               <div style="display: grid; float: right; grid-template-columns: auto 90px 90px">
                   <input type="hidden" name="groupid" value=" <?php print($group->id); ?> ">
 <?php
-if($group->ownerid == $user->id){
+if($group->ownerid == $user->id) {
 ?>
                   <input type="text" id="groupname_<?php print($group->id); ?>" name="groupname" style="grid-column: 1; grid-row: 1; height: 30px; margin-right:5px; visibility:hidden" value="<?php print($group->name); ?>">
                   <button type="submit" name="savegroup" class="pure-button" style="grid-column: 2; grid-row: 1; width: 85px; height: 30px; margin: 0;">Lagre</button>
@@ -157,10 +164,10 @@ foreach( $allgroups as $group ) {
           <div style="padding-bottom: 40px;">
           <h3 style="margin-bottom: 0;"><?php print($group->name); ?> </h3>
           <a href="scoreview.php?group=<?php print($group->id); ?>">Poengoversikt</a>
-          <form method="POST" class="pure-form">
+          <form method="GET" class="pure-form">
               <div style="display: grid; float: right; grid-template-columns: auto 90px 90px">
-                  <input type="hidden" name="groupid" value="<?php print($group->id); ?>">
-                  <button type="submit" name="joingroup" class="pure-button" style="grid-column: 3; grid-row: 1; width: 85px; height: 30px; margin: 0;">Sikker?</button>
+                  <input type="hidden" name="joingroup" value="<?php print($group->id); ?>">
+                  <button type="submit" class="pure-button" style="grid-column: 3; grid-row: 1; width: 85px; height: 30px; margin: 0;">Sikker?</button>
                   <button type="button" class="pure-button" style="grid-column: 3; grid-row: 1; width: 85px; height: 30px;" onclick="this.hidden=true">Bli med</button>
               </div>
           </form>
@@ -180,6 +187,7 @@ foreach( $allgroups as $group ) {
           </div>
           <br>
       </form>
+<?php } ?>
     </div><!--class="content"-->
 </div><!--id="main"-->
 <?php

@@ -11,12 +11,20 @@ function sendLogin($user) {
     $authtokenandemail = "?authtoken=" . $user->newauthtoken . "&email=" . urlencode($user->email);
     $login_url = $baseurl . "login.php" . $authtokenandemail;
     $deleteme_url = $baseurl . "deleteme.php" . $authtokenandemail;
-      
+
+    if (isset($_GET["joingroup"]))
+        $login_url .= "&joingroup=" . $_GET["joingroup"];
     $subject = 'Takk. Her er din innloggingslenke!';
     $content = "<h3>Hei " . $user->name . "</h3>
         <p>Velkommen til quiz-kalender.</p>
         <p>Bruk lenken under for å logge inn. <br>Du kan også bruke denne lenken til å logge inn fra andre enheter</p>
         <p><a href=\"" . $login_url . "\">" . $login_url . "</a></p>
+        <h3>Nyhet!</h3>
+        <p>Nå kan du konkurrere i bander!<br>
+        Du kan konkurrere både innad i banden og utad mot andre bander. <br>
+        Gå inn på Profil-siden for å opprette og melde deg inn i bander. <br>
+        Lag bander for kollegaene, idrettslaget, bygda eller søskenflokken. <br>
+        Du kan til og med bli medlem i flere bander.<br></p>
         <p>Lykke til, og husk å sjekke dagens oppgave hver dag.</p>
         <hr>
         <p>Hvis du ikke har bedt om denne e-posten kan du trygt slette den.</p>

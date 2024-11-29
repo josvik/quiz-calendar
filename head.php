@@ -6,7 +6,10 @@ $page_subtitle = "En julekalender med allsidige oppgaver";
 $logged_in = false;
 $user_id = 0;
 $is_admin = false;
-$not_logged_in_message = "<p>Du er ikke logget inn, bruk innloggingslenken du fikk i e-post. <br><a href=\"register.php\">Registrer bruker</a> hvis du ikke har gjort det enda.</p><p>Du kan registrere deg med samme e-post for å få tilsendt ny lenke.</p>";
+$joingroupval = "";
+if (isset($_GET["joingroup"]))
+    $joingroupval = "?joingroup=" . $_GET["joingroup"];
+$not_logged_in_message = "<p>Du er ikke logget inn, bruk innloggingslenken du fikk i e-post. <br><a href=\"register.php". $joingroupval . "\">Registrer bruker</a> hvis du ikke har gjort det enda.</p><p>Du kan registrere deg med samme e-post for å få tilsendt ny lenke.</p>";
 if (isset($_COOKIE['token']))
 {
   $user = dbGetUser($_COOKIE['token']);

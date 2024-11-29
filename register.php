@@ -55,15 +55,11 @@ if (!empty($name) && !empty($email)){
     $login->logintime = time();
     $login->type = "register";
     R::store($login);
-    
-
-    
-    require 'sendemail.php';
-    $emailsent = sendLogin($user);
-    if (! $emailsent)
-      $errormessages[] = "En feil oppsto under utsending av e-post";
-  } else
-    $errormessages[] = "E-post er allerede i bruk.";
+  }
+  require 'sendemail.php';
+  $emailsent = sendLogin($user);
+  if (! $emailsent)
+    $errormessages[] = "En feil oppsto under utsending av e-post";
 }
 if ($emailsent){
   echo "<div class=\"answerfeedback answercorrect\"><h3>En innloggingslenke er sendt til " . $user->email . "</h3></div>";

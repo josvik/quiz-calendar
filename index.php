@@ -26,10 +26,15 @@ if (!$logged_in)
                 Men hvis du avslører Hint 2, vil oppgaven miste hele poengverdien. Dette er fordi Hint 2 er tilnærmet et løsningsforslag.
             </p>
             <p>
+                Husk å invitere alle du kjenner til Quiz-kalenderen. <br>
                 Har du spørsmål, kommentarer eller er noe feil kan du ta kontakt på post@josvik.no .<br>
             </p>
             <p>
               Lykke til!
+            </p>
+            <p>
+              <b>PS: Ikke glem å opprette grupper (bande) og inviter venner, kollegaer og familie.</b><br>
+              Gå inn på <a href="<?php echo getBaseUrl(); ?>profile.php">profilen din</a> og meld deg inn i bander.
             </p>
 
             <hr>

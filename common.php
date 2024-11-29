@@ -24,9 +24,8 @@ function validateEmail($email) {
 }
 
 function getBaseUrl(){
-  echo $_SERVER['SERVER_PROTOCOL'] . "<br>";
   $baseurl = "http://";
-  if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
+  if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
     $baseurl = "https://";
   }
   $baseurl = $baseurl . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
