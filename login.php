@@ -55,7 +55,9 @@ if (isset($_GET['authtoken']) && isset($_GET['email'])) {
     if ($user != null) {
       require 'sendemail.php';
       $emailsent = sendLogin($user);
-      if (! $emailsent)
+      if ($emailsent)
+        echo "E-post sendt";
+      else
         $errormessages[] = "En feil oppsto under utsending av e-post";
     } else 
       echo "<p>Ingen bruker funnet. Du kan opprette en bruker <a href=\"register.php\"> her</a>.</p>";
