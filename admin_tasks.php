@@ -59,11 +59,21 @@ if (isset($_POST['day']) && isset($_POST['title']) && isset($_POST['release_time
   }
 }
 
-if (isset($_GET['taskid'])) {
+if (isset($_GET['deletetask']) && isset($_GET['taskid'])) {
+  $taskid = $_GET['taskid'];
+  $task = R::load('task', $taskid);
+  R::exec( 'DELETE FROM taskanswer WHERE task_id == ?', [ $taskid ] );
+  R::exec( 'DELETE FROM wronganswer WHERE task_id == ?', [ $taskid ] );
+  R::trash( $task );
+  echo "<b>Oppgave $task->day ($taskid) er slettet!.</b><br>Og alle svar som hørte til oppgaven.<br><br>";
+}
+
+if (isset($_GET['edittask']) && isset($_GET['taskid'])) {
   $task = R::load('task', $_GET['taskid']);
 } else {
   $task = R::dispense('task');
   $task->value = 10;
+  $task->attempts = 5;
   $task->release_time = time();
   $task->hide_time = time() + 2678400;
 }
@@ -172,7 +182,15 @@ foreach ($alltasks as &$task) {
   echo "<tr><td>Har ekstraoppgave:</td><td><b>$task->hasextratask</b></td></tr>";
   echo "<tr><td>Vises i tiden:</td><td><b>". date('Y-m-d H:i', $task->release_time). "</b> - <b>". date('Y-m-d H:i', $task->hide_time). "</b></td></tr>";
   echo "</table>";
-  echo "<a href=\"admin_tasks.php?taskid=$task->id\">Rediger</a>";
+  echo "<form method=\"GET\" style=\"height: 30px;\">";
+  echo "  <div style=\"display: grid; grid-template-columns: 90px auto 90px\">";
+  echo "    <input type=\"hidden\" name=\"taskid\" value=\"$task->id\">";
+  echo "    <button type=\"submit\" name=\"edittask\" class=\"pure-button\" style=\"grid-column: 1; grid-row: 1; width: 85px; height: 30px; margin: 0;\">Rediger</button>";
+  echo "    <button type=\"submit\" name=\"deletetask\" class=\"pure-button\" style=\"grid-column: 3; grid-row: 1; width: 110px; height: 30px; margin: 0;\">Helt sikker?</button>";
+  echo "    <button type=\"button\" class=\"pure-button\" style=\"grid-column: 3; grid-row: 1; width: 110px; height: 30px;\" onclick=\"this.hidden=true\">Sikker</button>";
+  echo "    <button type=\"button\" class=\"pure-button\" style=\"grid-column: 3; grid-row: 1; width: 110px; height: 30px;\" onclick=\"this.hidden=true\">Slett</button>";
+  echo "  </div>";
+  echo "</form>";
   echo "</p>";
   echo "<hr>";
 }
