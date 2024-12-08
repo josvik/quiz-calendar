@@ -136,36 +136,45 @@ if (!$logged_in)
           {
             $content .= "<div class=\"answerfeedback\"><h3>Du har allerede forøkt dette svaret på oppgaven</h3></div>";
           }
-          else if (mb_strtolower(trim($_POST['answer']), 'UTF-8') === mb_strtolower($task->answer, 'UTF-8'))
-          {
-            $task_answer->correct_answer_time = time();
-
-            $task_answer->score = $task->value;
-            if ($task_answer->show_hint2)
-              $task_answer->score = 0;
-            else if ($task_answer->show_hint1)
-              $task_answer->score = max($task_answer->score - 5, 0);
-            R::store($task_answer);
-
-            $content .= "
-            <div class=\"answerfeedback answercorrect\">
-              <h2>Korrekt!</h2>
-              <h3>Du fikk $task_answer->score poeng</h3>
-            </div>";
-          }
           else
           {
-            $wrong_answer = R::dispense('wronganswer');
-            $wrong_answer->user_id = $user_id;
-            $wrong_answer->task_id = $task->id;
-            $wrong_answer->extratask = false;
-            $wrong_answer->wrong_answer = $_POST['answer'];
-            $wrong_answer->wrong_time = time();
-            $wrong_answer->ipaddr = $_SERVER['REMOTE_ADDR'];
-            $wrong_answer->useragent = $_SERVER['HTTP_USER_AGENT'];
-            R::store($wrong_answer);
-            $attemptsleft -= 1;
-            $content .= "<div class=\"answerfeedback answerwrong\"><h3>Feil svar!</h3></div>";
+            $taskanswersplit = explode("|", $task->answer);
+            $wronganswer = true;
+            foreach ($taskanswersplit as $taskanswer) {
+              if (mb_strtolower(trim($_POST['answer']), 'UTF-8') === mb_strtolower($taskanswer, 'UTF-8'))
+              {
+                $task_answer->correct_answer_time = time();
+
+                $task_answer->score = $task->value;
+                if ($task_answer->show_hint2)
+                  $task_answer->score = 0;
+                else if ($task_answer->show_hint1)
+                  $task_answer->score = max($task_answer->score - 5, 0);
+                R::store($task_answer);
+
+                $content .= "
+                <div class=\"answerfeedback answercorrect\">
+                  <h2>Korrekt!</h2>
+                  <h3>Du fikk $task_answer->score poeng</h3>
+                </div>";
+                $wronganswer = false;
+                break;
+              }
+            }
+            if ($wronganswer)
+            {
+              $wrong_answer = R::dispense('wronganswer');
+              $wrong_answer->user_id = $user_id;
+              $wrong_answer->task_id = $task->id;
+              $wrong_answer->extratask = false;
+              $wrong_answer->wrong_answer = $_POST['answer'];
+              $wrong_answer->wrong_time = time();
+              $wrong_answer->ipaddr = $_SERVER['REMOTE_ADDR'];
+              $wrong_answer->useragent = $_SERVER['HTTP_USER_AGENT'];
+              R::store($wrong_answer);
+              $attemptsleft -= 1;
+              $content .= "<div class=\"answerfeedback answerwrong\"><h3>Feil svar!</h3></div>";
+            }
           }
         }
       }
