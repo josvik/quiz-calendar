@@ -6,11 +6,26 @@
   use PHPMailer\PHPMailer\PHPMailer;
   use PHPMailer\PHPMailer\Exception;
 
-function sendLogin($user) {
-    $baseurl = getBaseUrl();
+function getauthtokenandemail($user) {
     $authtokenandemail = "?authtoken=" . $user->newauthtoken . "&email=" . urlencode($user->email);
-    $login_url = $baseurl . "login.php" . $authtokenandemail;
-    $deleteme_url = $baseurl . "deleteme.php" . $authtokenandemail;
+    return $authtokenandemail;
+}
+
+function getloginurl($user) {
+    $baseurl = getBaseUrl();
+    $loginurl = $baseurl . "login.php" . getauthtokenandemail($user);
+    return $loginurl;
+}
+
+function getdeletemeurl($user) {
+    $baseurl = getBaseUrl();
+    $deletemeurl = $baseurl . "deleteme.php" . getauthtokenandemail($user);
+    return $deletemeurl;
+}
+
+function sendLogin($user) {
+    $login_url = getloginurl($user);
+    $deleteme_url = getdeletemeurl($user);
 
     if (isset($_GET["joingroup"]))
         $login_url .= "&joingroup=" . $_GET["joingroup"];
@@ -52,17 +67,10 @@ function sendEmail($user, $mailSubject, $mailContent) {
     $mail->Subject = $mailSubject;
     $mail->isHTML(true);
     $mail->Body = $mailContent;
-    
-    echo "<p>";
-    if($mail->send()){
-      echo 'En e-post er sendt til ' . $user->email;
-      return True;
-    } else {
-      echo 'E-post kan ikke sendes.<br><br>';
-      echo 'Feilmelding: <br>' . $mail->ErrorInfo;
-      return False;
-    }
-    echo "</p>";
+    //print("<pre>");
+    //print($mailContent);
+    //print("</pre>");
+    return $mail->send();
   }
 }
 ?>
