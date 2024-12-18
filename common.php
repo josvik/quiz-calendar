@@ -32,4 +32,24 @@ function getBaseUrl(){
   $baseurl = substr($baseurl, 0, strrpos($baseurl, "/")) . "/";
   return($baseurl);
 }
+
+function getDaysHoursMinutesFromSeconds($seconds) {
+  $seconds = intval($seconds);
+  $timeused_days = floor($seconds / 86400);
+  $seconds -= $timeused_days * 86400;
+  $timeused_hours = floor($seconds / 3600);
+  $seconds -= $timeused_hours * 3600;
+  $timeused_minutes = floor($seconds / 60);
+  $seconds -= $timeused_minutes * 60;
+
+  $timeused = "";
+  if ($timeused_days > 0) {
+    $timeused .= $timeused_days . "d " . $timeused_hours . "t";
+  } elseif ($timeused_hours > 0) {
+    $timeused .= $timeused_hours . "t " . $timeused_minutes . "m";
+  } elseif ($timeused_minutes > 0) {
+    $timeused .= $timeused_minutes . "m " . $seconds . "s";
+  }
+  return $timeused;
+}
 ?>

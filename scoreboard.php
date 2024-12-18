@@ -4,10 +4,16 @@
 if (isset($logged_in) && $logged_in) 
 {
   $scoreboard = R::getAll( '
-        SELECT SUM(score) AS totalscore, MAX(correct_answer_time) AS lastanswertime, COUNT(CASE WHEN correct_answer_time > 0 THEN 1 END) as tasks, COUNT(CASE WHEN correct_answerextra_time > 0 THEN 1 END) as extratasks, user_id
+        SELECT SUM(score) AS totalscore,
+               MAX(correct_answer_time) AS lastanswertime,
+               COUNT(CASE WHEN correct_answer_time > 0 THEN 1 END) as tasks,
+               COUNT(CASE WHEN correct_answerextra_time > 0 THEN 1 END) as extratasks,
+               SUM(correct_answer_sec) AS totalsec,
+               user_id
         FROM taskanswer
+        WHERE user_id IS NOT NULL
         GROUP BY user_id
-        ORDER BY totalscore DESC, lastanswertime ASC
+        ORDER BY totalscore DESC, totalsec ASC
     ' );
 
     $user_ids = array_column($scoreboard, 'user_id');
@@ -21,11 +27,12 @@ if (isset($logged_in) && $logged_in)
         <table class="pure-table">
           <thead>
             <tr>
-              <th style="width:10%">#</th>
-              <th style="width:32%">Navn</th>
+              <th style="width:7%">#</th>
+              <th style="width:28%">Navn</th>
               <th style="width:10%">Poeng</th>
               <th style="width:18%">Antall (ekstra)</th>
-              <th style="width:30%">Sist løste</th>
+              <th style="width:24%">Sist løste</th>
+              <th style="width:13%">Snitt tid</th>
             </tr>
           </thead>
           <tbody>
@@ -43,7 +50,9 @@ if (isset($logged_in) && $logged_in)
       
       $dt->setTimestamp(intval($scoreline['lastanswertime']));
       $lastsolve = $dt->format('Y-m-d H:i:s');
-      
+      $averagesec = $scoreline['totalsec'] / $scoreline['tasks'];
+      $averagetimeused = getDaysHoursMinutesFromSeconds($averagesec);
+
       if ($scoreline['user_id'] == $user_id)
         echo "            <tr class=\"pure-table-me\">\n";
       else if ($row % 2 == 0)
@@ -58,6 +67,7 @@ if (isset($logged_in) && $logged_in)
         echo " (" . $scoreline['extratasks'] . ")";
       echo "</td>\n";
       echo "              <td>$lastsolve</td>\n";
+      echo "              <td>$averagetimeused</td>\n";
       echo "            </tr>\n";
       $row++;
       $prev_score = $scoreline['totalscore'];

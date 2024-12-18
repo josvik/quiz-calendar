@@ -7,12 +7,13 @@ if (isset($logged_in) && $logged_in)
         <table class="pure-table">
           <thead>
             <tr>
-              <th style="width:45%">Oppgave</th>
+              <th style="width:40%">Oppgave</th>
               <th style="width:5%">Hint 1</th>
               <th style="width:5%">Hint 2</th>
               <th style="width:5%">Ekstra</th>
-              <th style="width:10%">Poeng</th>
-              <th style="width:35%">Løst tid</th>
+              <th style="width:5%">Poeng</th>
+              <th style="width:20%">Løst tid</th>
+              <th style="width:20%">Brukt tid</th>
             </tr>
           </thead>
           <tbody>
@@ -24,7 +25,7 @@ if (isset($logged_in) && $logged_in)
     ORDER BY release_time ASC
     ', [ time() ]);
   $myscores = R::getAssoc( '
-    SELECT task_id, show_hint1, show_hint2, score, correct_answer_time, correct_answerextra_time
+    SELECT task_id, show_hint1, show_hint2, score, correct_answer_time, correct_answerextra_time, correct_answer_sec
     FROM taskanswer
     WHERE user_id = ?',
     [$user_id] );
@@ -37,13 +38,15 @@ if (isset($logged_in) && $logged_in)
   $count_hint1 = 0;
   $count_hint2 = 0;
   $count_extra = 0;
+  $total_used_sec = 0;
   foreach ($activetasks as $task){
     $score = "";
     $solvetime = "";
     $hint1 = "";
     $hint2 = "";
     $extra = "";
-    
+    $correct_answer_sec = "";
+
     if (array_key_exists($task['id'], $myscores)){
       $myscore = $myscores[$task['id']];
       if ($myscore != null){
@@ -54,6 +57,11 @@ if (isset($logged_in) && $logged_in)
           $dt->setTimestamp($cor_anw_time);
           $solvetime = $dt->format('Y-m-d H:i:s');
         }
+
+        $usedsec = intval($myscore['correct_answer_sec']);
+        $correct_answer_sec = getDaysHoursMinutesFromSeconds($usedsec);
+        $total_used_sec += $usedsec;
+
         if ($myscore['show_hint1']){
           $hint1 = "&check;";
           $count_hint1++;
@@ -79,6 +87,7 @@ if (isset($logged_in) && $logged_in)
     echo "              <td>$extra</td>\n";
     echo "              <td>$score</td>\n";
     echo "              <td>$solvetime</td>\n";
+    echo "              <td>$correct_answer_sec</td>\n";
     echo "            </tr>\n";
     $row++;
   }
@@ -92,6 +101,7 @@ if (isset($logged_in) && $logged_in)
               <td><?php echo $count_extra; ?></td>
               <td><?php echo $total_score; ?></td>
               <td></td>
+              <td><?php echo getDaysHoursMinutesFromSeconds($total_used_sec); ?></td>
             </tr>
           </tfoot>
         </table>
