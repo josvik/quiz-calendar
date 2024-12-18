@@ -40,6 +40,10 @@ if (isset($_POST["profil"]) && $user != null) {
   if (isset($_POST["sendmail"]) && $_POST["sendmail"]==1){
     $user->sendemail = True;
   }
+  $user->sendemailnextevent = True;
+  if (isset($_POST["sendemailnextevent"]) && $_POST["sendemailnextevent"]==0){
+    $user->sendemailnextevent = False;
+  }
   R::store($user);
   echo "<div class=\"answerfeedback answercorrect\" style=\"display: inline-block;padding: 0px 50px; margin-left: 6vw;\">";
   echo "<h3>Lagret</h3>";
@@ -60,6 +64,11 @@ if (isset($_POST["profil"]) && $user != null) {
               <label for="sendmail">Tillat:</label>
               <input type="checkbox" id="sendmail" name="sendmail" value="1" <?php if ($user->sendemail) echo "checked"; ?>>
               Send meg e-post når kalenderen starter og en påminnelse en gang i uka.
+              </input>
+              <br>
+              <label for="sendemailnextevent"> </label>
+              <input type="checkbox" id="sendemailnextevent" name="sendemailnextevent" value="1" <?php if ($user->sendemailnextevent) echo "checked"; ?>>
+              Send meg e-post neste gang quiz-kalenderen arrangeres.
               </input>
             </div>
             <br>

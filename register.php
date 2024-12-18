@@ -37,7 +37,7 @@ if (isset($_POST['name']) && isset($_POST['email'])) {
 $emailsent = False;
 
 if (!empty($name) && !empty($email)){
-  $user = R::findOne('user', ' email = ?', [$email] );
+  $user = R::findOne('user', ' LOWER(email) = LOWER(?)', [$email] );
   if ($user == null) {
     $user = R::dispense('user');
     $user->email = $email;
@@ -46,6 +46,7 @@ if (!empty($name) && !empty($email)){
     $auth_token = bin2hex(random_bytes(16));
     $user->newauthtoken = $auth_token;
     $user->sendemail = True;
+    $user->sendemailnextevent = True;
     $user->admin = False;
     R::store($user);
     

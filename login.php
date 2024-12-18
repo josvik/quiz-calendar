@@ -5,7 +5,7 @@ setcookie('token', '', time()-3600);
 if (isset($_GET['authtoken']) && isset($_GET['email'])) {
   require("db.php");
   require 'common.php';
-  $user = R::findOne('user', ' newauthtoken = ? AND email = ?', [$_GET['authtoken'], $_GET['email']] );
+  $user = R::findOne('user', ' newauthtoken = ? AND LOWER(email) = LOWER(?)', [$_GET['authtoken'], $_GET['email']] );
   if ($user == null) {
     echo "Feil token";
   }
@@ -50,7 +50,7 @@ if (isset($_GET['authtoken']) && isset($_GET['email'])) {
     
     $user = null;
     if (!empty($email))
-      $user = R::findOne('user', ' email = ?', [$email] );
+      $user = R::findOne('user', ' LOWER(email) = LOWER(?)', [$email] );
 
     if ($user != null) {
       require 'sendemail.php';
