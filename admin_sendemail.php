@@ -14,6 +14,19 @@ if (!$logged_in)
       </div>
 
       <div class="content">
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+$(document).ready(function(){
+    $("#mailContent").keyup(function(){
+        // Getting the current value of textarea
+        var currentText = $(this).val();
+
+        // Setting the Div content
+        $("#mailContentHTML").html(currentText);
+    });
+});
+</script>
 <?php 
 
 $mailsubject1 = "Quiz-Kalenderen har startet!";
@@ -54,12 +67,40 @@ $mailContent26 = "<h3>Quiz-kalenderen 2023 er ferdig. Takk!</h3>
       Hilsen Jostein.
 ";
 
-$mailsubject = $mailsubject26;
-$mailContent = $mailContent26;
-      echo sprintf($mailContent, "login_url", "login_url");
+$mailsubject = $mailsubject1;
+$mailContent = $mailContent1;
+
+if (isset($_POST['mailsubject']) && isset($_POST['mailContent'])) {
+    $mailsubject = $_POST['mailsubject'];
+    $mailContent = $_POST['mailContent'];
+}
+
 ?>
+<div id="mailContentHTML">
+<?php echo sprintf($mailContent, "--==login_url==--", "--==login_url==--"); ?>
+</div>
 <form method="POST">
+<div>
+    <label for="mailsubject">Emne</label>
+    <input type="text" id="mailsubject" name="mailsubject" style="width:50%; display: inline-block; margin-right:15px" value="<?php echo $mailsubject ?>">
+</div>
+<div>
+    <label for="mailContent">Innhold</label>
+    <textarea id="mailContent" name="mailContent" rows="20" cols="100"><?php echo $mailContent; ?></textarea>
+</div>
 <input type="hidden" name="sendpost" value="1">
+<?php
+  $allusers = R::findAll( 'user');
+?>
+<div>
+  <label>Mottakere</label>
+  <ul>
+  <?php foreach ($allusers as &$user) { ?>
+    <li><input type="checkbox" name="userid[]" value="<?php echo $user->id; ?>"><?php echo $user->email . " - " . $user->name; ?></li>
+  <?php } ?>
+  </ul>
+</div>
+
 <button type="submit" class="pure-button pure-button-primary" style="grid-column: 3; margin: 0px; ">Send</button>
 </form>
 <?php
@@ -72,17 +113,18 @@ if (isset($_POST['sendpost'])){
   $users26 = R::findAll( 'user' , ' ' );
   
   $users = $users26;
-  foreach ($users as &$user) {
-    if (True) {
-      echo $user->email . "<br>";
-    } else{
-      $authtokenandemail = "?authtoken=" . $user->newauthtoken . "&email=" . urlencode($user->email);
-      $login_url = "https://quiz.josvik.no/login.php" . $authtokenandemail;
-      
+  foreach( $_POST['userid'] as $userid ) {
+    $user = R::load('user', $userid);
+    if ($user) {
+      $login_url = getloginurl($user);
       $content = sprintf($mailContent, $login_url, $login_url);
       $emailsent = sendEmail($user, $mailsubject, $content);
-      if (!$emailsent)
-        $errormessages[] = "En feil oppsto under utsending av e-post";
+      echo $user->email . ": ";
+      if ($emailsent)
+        echo "ok<br>";
+      else
+        echo "En feil oppsto under utsending av e-post";
+      echo "<br>";
     }
   }
 unset($user);
