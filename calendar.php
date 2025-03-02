@@ -138,13 +138,18 @@ if (!$logged_in)
           }
           else
           {
+            $correctanswer = false;
             $taskanswersplit = explode("|", $task->answer);
-            $wronganswer = true;
             foreach ($taskanswersplit as $taskanswer) {
               if (mb_strtolower(trim($_POST['answer']), 'UTF-8') === mb_strtolower($taskanswer, 'UTF-8'))
               {
-                $task_answer->correct_answer_time = time();
-
+                $correctanswer = true;
+                break;
+              }
+            }
+            if ($correctanswer){
+              $task_answer->correct_answer_time = time();
+              $task_answer->correct_answer_sec = $task_answer->correct_answer_time - $task->release_time;
                 $task_answer->score = $task->value;
                 if ($task_answer->show_hint2)
                   $task_answer->score = 0;
@@ -157,12 +162,7 @@ if (!$logged_in)
                   <h2>Korrekt!</h2>
                   <h3>Du fikk $task_answer->score poeng</h3>
                 </div>";
-                $wronganswer = false;
-                break;
-              }
-            }
-            if ($wronganswer)
-            {
+            } else {
               $wrong_answer = R::dispense('wronganswer');
               $wrong_answer->user_id = $user_id;
               $wrong_answer->task_id = $task->id;
