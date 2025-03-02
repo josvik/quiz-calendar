@@ -4,7 +4,7 @@ require 'head.php';
 $deletedmessage = "ikke slettet";
 if (isset($_POST["slettmeg"]) && isset($logged_in) && $logged_in) {
   R::trash($user);
-  R::exec( 'DELETE FROM taskanswer WHERE user_id == ?', [ $user_id ] );
+  //R::exec( 'DELETE FROM taskanswer WHERE user_id == ?', [ $user_id ] );
 
   setcookie('token', '', time()-3600);
   $logged_in = False;
