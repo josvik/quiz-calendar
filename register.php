@@ -37,9 +37,10 @@ if (isset($_POST['name']) && isset($_POST['email'])) {
 $emailsent = False;
 
 if (!empty($name) && !empty($email)){
-  $user = R::findOne('user', ' LOWER(email) = LOWER(?)', [$email] );
-  if ($user == null) {
+  $user = R::findOne('user', ' LOWER(email) = LOWER(?) ', [$email] );
+  if ($user == null)
     $user = R::dispense('user');
+  if ($user->newauthtoken == null) {
     $user->email = $email;
     
     $user->newname = $name;

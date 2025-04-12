@@ -50,7 +50,7 @@ if (isset($_GET['authtoken']) && isset($_GET['email'])) {
     
     $user = null;
     if (!empty($email))
-      $user = R::findOne('user', ' LOWER(email) = LOWER(?)', [$email] );
+      $user = R::findOne('user', ' LOWER(email) = LOWER(?) AND newauthtoken IS NOT NULL', [$email] );
 
     if ($user != null) {
       require 'sendemail.php';
