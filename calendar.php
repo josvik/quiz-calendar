@@ -37,8 +37,9 @@ if (!$logged_in)
         $task_answer = R::dispense('taskanswer');
         $task_answer->user_id = $user_id;
         $task_answer->task_id = $task->id;
-        $task_answer->show_hint1 = false;
-        $task_answer->show_hint2 = false;
+        $task_answer->show_hint1 = NULL;
+        $task_answer->show_hint2 = NULL;
+        $task_answer->opened_time = time();
         $task_answer->correct_answer_time = 0;
       }
       $task_answer->ipaddr = $_SERVER['REMOTE_ADDR'];
@@ -151,9 +152,9 @@ if (!$logged_in)
               $task_answer->correct_answer_time = time();
               $task_answer->correct_answer_sec = $task_answer->correct_answer_time - $task->release_time;
                 $task_answer->score = $task->value;
-                if ($task_answer->show_hint2)
+                if ($task_answer->show_hint2 > 0)
                   $task_answer->score = 0;
-                else if ($task_answer->show_hint1)
+                else if ($task_answer->show_hint1 > 0)
                   $task_answer->score = max($task_answer->score - 5, 0);
                 R::store($task_answer);
 
@@ -180,18 +181,17 @@ if (!$logged_in)
       }
       
       if (isset($_POST['show_hint1']) && $_POST['show_hint1'] == "1")
-        $task_answer->show_hint1 = true;
+        $task_answer->show_hint1 = time();
       
       if (isset($_POST['show_hint2']) && $_POST['show_hint2'] == "1")
-        $task_answer->show_hint2 = true;
+        $task_answer->show_hint2 = time();
       
-      if (! $task_answer->correct_answer_time > 0)
-        R::store($task_answer);
+      R::store($task_answer);
 
       $task_value = $task->value;
-      if ($task_answer->show_hint1)
+      if ($task_answer->show_hint1 > 0)
         $task_value = max($task_value - 5, 0);
-      if ($task_answer->show_hint2)
+      if ($task_answer->show_hint2 > 0)
         $task_value = 0;
       
       $taskcorrect = "";
@@ -291,17 +291,16 @@ if (!$logged_in)
             <div>
               <h2 class=\"content-subhead\">Hint 1 (-5 poeng)</h2>
 ";
-      if ($task_answer->show_hint1)
+      if ($task_answer->show_hint1 > 0)
       {
         $content .= "              <a id=\"hint1\"><p>$task->hint1</p></a>
               <h2 class=\"content-subhead\">Hint 2 (0 poeng)</h2>\n";
-        if ($task_answer->show_hint2){
+        if ($task_answer->show_hint2 > 0){
           $content .= "              <a id=\"hint2\"><p>$task->hint2</p></a>\n";
         }
         else
         {
           $content .= "                  <form method=\"POST\" action=\"#hint2\" class=\"pure-form\">
-                    <input type=\"hidden\" name=\"show_hint1\" value=\"1\">
                     <input type=\"hidden\" name=\"show_hint2\" value=\"1\">
                     <div style=\"display: grid;\">
                       <button type=\"submit\" class=\"pure-button\" style=\"grid-column: 1; grid-row: 1; width: 150px; height: 40px; margin: 0;\">Helt sikker?</button>
