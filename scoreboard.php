@@ -30,7 +30,7 @@ if (isset($logged_in) && $logged_in)
               <th style="width:7%">#</th>
               <th style="width:28%">Navn</th>
               <th style="width:10%">Poeng</th>
-              <th style="width:18%">Antall (ekstra)</th>
+              <th style="width:18%">Oppgaver</th>
               <th style="width:24%">Sist løste</th>
               <th style="width:13%">Snitt tid</th>
             </tr>
