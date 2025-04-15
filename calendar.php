@@ -209,6 +209,21 @@ if (!$logged_in)
       $content .= "<div class=\"header\"><h2>".$_GET['dag']."</h2>
           </div>\n";
 
+      $wronganswers_all =  R::getAll('
+              SELECT wrong_answer, extratask
+              FROM wronganswer
+              WHERE task_id = ?
+              AND user_id = ?'
+          , [ $task->id, $user_id ]);
+      $wronganswers = "";
+      $wronganswersextra = "";
+      foreach ($wronganswers_all as $wronganswer) {
+        if($wronganswer['extratask'])
+            $wronganswersextra .= "'" . $wronganswer['wrong_answer'] . "' ";
+        else
+            $wronganswers .= "'" . $wronganswer['wrong_answer'] . "' ";
+      }
+
       if ($task_answer->correct_answer_time == 0 && !isset($_GET['extraoverstyring']))
       {
         $content .= "              <div style=\"float:right; text-align:right; padding: 1em;\">Verdi: $task_value poeng</div>";
@@ -246,6 +261,7 @@ if (!$logged_in)
                 <input type=\"text\" id=\"answerextra\" name=\"answerextra\" style=\"grid-column: 2;\" $disabled_answerextra>
                 <button type=\"submit\" class=\"pure-button pure-button-primary\" style=\"grid-column: 3; margin: 0px;\" $disabled_answerextra>Svar</button>
                 <span style=\"grid-column: 2; text-align: right; margin: 0px; \">Du har $attemptsextraleft forsøk igjen</span>
+                <span style=\"grid-column: 2; text-align: right; margin: 0px; \">$wronganswersextra</span>
               </div>
             </div>  
           </form>
@@ -283,6 +299,7 @@ if (!$logged_in)
                   <input type=\"text\" id=\"answer\" name=\"answer\" style=\"grid-column: 2;\" $disabled_answer>
                   <button type=\"submit\" class=\"pure-button pure-button-primary\" style=\"grid-column: 3; margin: 0px; \" $disabled_answer>Svar</button>
                   <span style=\"grid-column: 2; text-align: right; margin: 0px; \">Du har $attemptsleft forsøk igjen</span>
+                  <span style=\"grid-column: 2; text-align: right; margin: 0px; \">$wronganswers</span>
                 </div>
               </div>  
             </form>
