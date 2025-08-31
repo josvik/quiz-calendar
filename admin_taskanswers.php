@@ -29,6 +29,7 @@ if (isset($_GET["task_id"])){
       <thead>
         <tr>
           <th>Navn</th>
+          <th>Åpnet</th>
           <th>Riktig</th>
           <th>Hint 1</th>
           <th>Hint 2</th>
@@ -42,21 +43,31 @@ if (isset($_GET["task_id"])){
 <?php
     $row = 1;
     foreach ($taskanswers as $taskanswer) {
+        $openedtime = "";
         $answertime = "";
         $answerextratime = "";
+        $hint1time = "";
+        $hint2time = "";
+        if ($taskanswer['opened_time'] > 0)
+            $openedtime = date('Y-m-d H:i', $taskanswer['opened_time']);
         if ($taskanswer['correct_answer_time'] > 0)
             $answertime = date('Y-m-d H:i', $taskanswer['correct_answer_time']);
         if ($taskanswer['correct_answerextra_time'] > 0)
             $answerextratime = date('Y-m-d H:i', $taskanswer['correct_answerextra_time']);
+        if ($taskanswer['show_hint1'] > 0)
+            $hint1time = date('Y-m-d H:i', $taskanswer['show_hint1']);
+        if ($taskanswer['show_hint2'] > 0)
+            $hint2time = date('Y-m-d H:i', $taskanswer['show_hint2']);
 
         if ($row % 2 == 0)
             echo "            <tr class=\"pure-table-odd\">\n";
         else
             echo "            <tr>\n";
         echo "          <td>" . $taskanswer['name'] . "</td>\n";
+        echo "          <td>" . $openedtime . "</td>\n";
         echo "          <td>" . $answertime . "</td>\n";
-        echo "          <td>" . $taskanswer['show_hint1'] . "</td>\n";
-        echo "          <td>" . $taskanswer['show_hint2'] . "</td>\n";
+        echo "          <td>" . $hint1time . "</td>\n";
+        echo "          <td>" . $hint2time . "</td>\n";
         echo "          <td>" . $answerextratime . "</td>\n";
         echo "          <td>" . $taskanswer['score'] . "</td>\n";
         echo "          <td>" . getDaysHoursMinutesFromSeconds($taskanswer['correct_answer_sec']) . "</td>\n";
@@ -113,6 +124,7 @@ if (isset($_GET["task_id"])){
       <thead>
         <tr>
           <th style="width:25%">Oppgave</th>
+          <th style="width:15%">Åpnet</th>
           <th style="width:15%">Riktig</th>
           <th style="width:15%">Hint 1</th>
           <th style="width:15%">Hint 2</th>
@@ -124,9 +136,10 @@ if (isset($_GET["task_id"])){
 <?php
 $alltaskanswers = R::getAll( '
     SELECT t.id as id, t.day as day,
+      COUNT(CASE WHEN ta.opened_time > 0 THEN 1 END) as count_opened,
       COUNT(CASE WHEN ta.correct_answer_time > 0 THEN 1 END) as count_correctanswers,
-      SUM(ta.show_hint1) as count_hint1,
-      SUM(ta.show_hint2) as count_hint2,
+      COUNT(CASE WHEN ta.show_hint1 > 0 THEN 1 END) as count_hint1,
+      COUNT(CASE WHEN ta.show_hint2 > 0 THEN 1 END) as count_hint2,
       COUNT(CASE WHEN ta.correct_answerextra_time > 0 THEN 1 END) as count_correctanswersextra,
       SUM(ta.correct_answer_sec) as totalsec
     FROM taskanswer ta
@@ -143,6 +156,7 @@ foreach ($alltaskanswers as $taskanswer) {
     else
         echo "            <tr>\n";
     echo "          <td><a href=\"admin_taskanswers.php?task_id=" . $taskanswer['id'] . "&day=" .  $taskanswer['day'] . "\">" . $taskanswer['day'] . "</a></td>\n";
+    echo "          <td>" . $taskanswer['count_opened'] . "</td>\n";
     echo "          <td>" . $taskanswer['count_correctanswers'] . "</td>\n";
     echo "          <td>" . $taskanswer['count_hint1'] . "</td>\n";
     echo "          <td>" . $taskanswer['count_hint2'] . "</td>\n";
