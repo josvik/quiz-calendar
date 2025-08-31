@@ -63,7 +63,7 @@ if (isset($_POST["profil"]) && $user != null) {
             <div>
               <label for="sendmail">Tillat:</label>
               <input type="checkbox" id="sendmail" name="sendmail" value="1" <?php if ($user->sendemail) echo "checked"; ?>>
-              Send meg e-post når kalenderen starter og en påminnelse en gang i uka.
+              Send meg e-post når nye oppgaver publiseres.
               </input>
               <br>
               <label for="sendemailnextevent"> </label>

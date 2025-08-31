@@ -7,24 +7,22 @@ require 'menu.php';
             <h1><?php echo $page_title; ?></h1>
             <h2><?php echo $page_subtitle; ?></h2>
         </div>
-
         <div class="content">
+    <h2>Info</h2>
 <?php
-if (!$logged_in) 
-{
-  echo $not_logged_in_message;
-} else {
-  echo $texts["info_winners"];
-  echo $texts["welcome_paragraph"];
-  echo $texts["info_time"];
-  echo $texts["info_good_luck"];
-?>
+echo $texts["info_time"];
 
-            <hr>
-            <br>
-<?php
-            include("tiles.php");
-}
+echo $texts["info_prices"];
+
+echo $texts["info_points"];
+
+echo $texts["info_groups"];
+
+echo $texts["info_rules"];
+
+echo "<br><hr>";
+
+echo $texts["info_questions"];
 ?>
         </div><!--class="content"-->
     </div><!--id="main"-->

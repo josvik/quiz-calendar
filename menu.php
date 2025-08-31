@@ -9,6 +9,7 @@
             <a class="pure-menu-heading" href="<?php echo getBaseUrl(); ?>">quiz.josvik.no </a>
 
             <ul class="pure-menu-list">
+                <li class="pure-menu-item"><a class="pure-menu-link" href="info.php">Info</a></li>
               
 <?php
 

@@ -1,29 +1,20 @@
 <?php
-require 'db.php';
-require 'common.php';
-$page_title = "Quiz-kalender";
-$page_subtitle = "En julekalender med allsidige oppgaver";
-$logged_in = false;
-$user_id = 0;
-$is_admin = false;
+require 'init_page.php';
+
 $joingroupval = "";
 if (isset($_GET["joingroup"]))
     $joingroupval = "?joingroup=" . $_GET["joingroup"];
-$not_logged_in_message = "<p>Du er ikke logget inn, bruk innloggingslenken du fikk i e-post. <br><a href=\"register.php". $joingroupval . "\">Registrer bruker</a> hvis du ikke har gjort det enda.</p><p>Du kan registrere deg med samme e-post for å få tilsendt ny lenke.</p>";
-if (isset($_COOKIE['token']))
-{
-  $user = dbGetUser($_COOKIE['token']);
-  if ($user != null)
-  {
-    $logged_in = true;
-    $user_id = $user->id;
-    $is_admin = $user->admin;
-  }
-  else 
-  {
-    setcookie("token", "", time() - 3600);
-  }
-}
+$not_logged_in_message = $texts['welcome_paragraph'] . $texts["info_time"] . $texts["info_good_luck"] . "
+<br><br><hr>
+<p>
+For å delta i Quiz-kalenderen må du være innlogget.<br>
+Vennligst bruk innloggingslenken du mottok på e-post for å få tilgang til dagens oppgaver.</p>
+
+<p><b>Har du ikke registrert deg ennå?</b><br>
+<a href=\"register.php". $joingroupval . "\">Opprett en bruker her</a> for å bli med på moroa!</p>
+
+<p><b>Finner du ikke innloggingslenken?</b><br>
+Ingen problem! <a href=\"register.php". $joingroupval . "\">Registrer deg på nytt med samme e-postadresse</a> for å få tilsendt en ny innloggingslenke.</p>";
 ?>
 <!DOCTYPE html>
 <html lang="nb">
@@ -35,7 +26,7 @@ if (isset($_COOKIE['token']))
     <link rel="stylesheet" href="layout/pure/pure-min.css">
     <link rel="stylesheet" href="layout/pure/grids-responsive-min.css">
     <link rel="stylesheet" href="layout/pure/side-menu-styles.css">
-    <link rel="stylesheet" href="layout/style.css?v=0.42">
+    <link rel="stylesheet" href="layout/style.css?v=0.43">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">

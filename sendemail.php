@@ -24,27 +24,28 @@ function getdeletemeurl($user) {
 }
 
 function sendLogin($user) {
+    $base_url = getBaseUrl();
     $login_url = getloginurl($user);
+    //print($login_url);
     $deleteme_url = getdeletemeurl($user);
 
     if (isset($_GET["joingroup"]))
         $login_url .= "&joingroup=" . $_GET["joingroup"];
-    $subject = 'Takk. Her er din innloggingslenke!';
-    $content = "<h3>Hei " . $user->name . "</h3>
-        <p>Velkommen til quiz-kalender.</p>
-        <p>Bruk lenken under for å logge inn. <br>Du kan også bruke denne lenken til å logge inn fra andre enheter</p>
+    $subject = 'Velkommen til Quiz-kalender - Logg inn her';
+    $content = "<h3>Hei " . $user->newname . "</h3>
+        <p>Velkommen til quiz-kalenderen i påsken 2025! 🐣✨</p>
+        <p>For å logge inn, bruk lenken nedenfor:</p>
         <p><a href=\"" . $login_url . "\">" . $login_url . "</a></p>
-        <h3>Nyhet!</h3>
-        <p>Nå kan du konkurrere i bander!<br>
-        Du kan konkurrere både innad i banden og utad mot andre bander. <br>
-        Gå inn på Profil-siden for å opprette og melde deg inn i bander. <br>
-        Lag bander for kollegaene, idrettslaget, bygda eller søskenflokken. <br>
-        Du kan til og med bli medlem i flere bander.<br></p>
-        <p>Lykke til, og husk å sjekke dagens oppgave hver dag.</p>
+        <p>Du kan også bruke denne lenken fra andre enheter.<br>
+            Når du har logget inn én gang, forblir du innlogget i 30 dager
+            og kan enkelt gå til <a href=\"" . $base_url . "\">" . $base_url . "</a> for å sjekke dagens oppgave. <br></p>
+        <p><b>🏅 Konkurrer i bander!</b><br>
+        Gjør quizen enda morsommere ved å konkurrere sammen med venner, kollegaer eller familien.<br>
+        Opprett eller bli med i en bande på Profil-siden, og se hvem som blir den beste!</p>
+        <p>Lykke til – og husk å sjekke dagens oppgave hver dag i påsken! 🐥</p>
         <hr>
-        <p>Hvis du ikke har bedt om denne e-posten kan du trygt slette den.</p>
-        <hr>
-        <p>Hvis du ønsker å slette dine data kan du bruke følgende lenke<br><a href=\"" . $deleteme_url . "\">Slett meg</a></p>
+        <p>Hvis du ikke har bedt om denne e-posten, kan du trygt ignorere den.</p>
+        <p>Ønsker du å slette dine data? Klikk her: <a href=\"" . $deleteme_url . "\">[Slett meg]</a></p>
         ";
 
     return sendEmail($user, $subject, $content);
@@ -70,6 +71,7 @@ function sendEmail($user, $mailSubject, $mailContent) {
     //print("<pre>");
     //print($mailContent);
     //print("</pre>");
+
     return $mail->send();
   }
 }
