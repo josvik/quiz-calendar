@@ -11,8 +11,8 @@
   
   define('TIMEZONE', new DateTimeZone('Europe/Oslo'));
   
-  define('CALENDAR_ROWS', 6);
+  define('CALENDAR_ROWS', 3);
   define('CALENDAR_COLS', 4);
   //Images tiles in format: CALENDAR_BG . "-$col-$row.png"
-  define('CALENDAR_BG', "bg/bg");
+  define('CALENDAR_BG', "bg/paskebg");
 ?>

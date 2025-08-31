@@ -1,21 +1,21 @@
 <?php
 return [
     "page_title" => "Quiz-kalender",
-    "page_subtitle" => "En julekalender med allsidige oppgaver",
-    "welcome_paragraph" => "<h3>Nye oppgaver, hver dag i hele adventstiden</h3>
+    "page_subtitle" => "Varierte oppgaver hver dag i påsken",
+    "welcome_paragraph" => "<h3>Quiz-kalender – Bli med på påskemoro!🐣</h3>
                     <p>
-                        Gjør adventstiden ekstra spennende med Quiz-kalender!<br>
+                        Gjør påsken ekstra spennende med Quiz-kalender!<br>
                         Hver dag får du nye utfordringer som utfordrer både logikk, kunnskap og kreativitet.
-                        Enten du løser oppgavene alene eller konkurrerer sammen med venner, familie eller kollegaer, er dette en morsom måte å gjøre adventstiden enda mer underholdende.
+                        Enten du løser oppgavene alene eller konkurrerer sammen med venner, familie eller kollegaer, er dette en morsom måte å gjøre påsken enda mer underholdende.
                         Klarer du å holde poengsummen oppe gjennom hele perioden?
                     </p>",
     "info_good_luck" => "
                     <p>
-                        Lykke til – og ha en morsom og utfordrende adventstid! 🎅✨
+                        Lykke til – og ha en morsom og utfordrende påske! 🐣✨
                     </p>",
     "info_winners" => "", #"
 #                    <br>
-#                    <h2>Vinner av Quiz-Kalender 2025!!</h2>
+#                    <h2>Vinner av Quiz-Kalender Påske 2025!!</h2>
 #                    <h1></h1>
 #                    <br>
 #                    <h2>Vinner trukket fra alle oppgavene:</h2>
@@ -27,25 +27,25 @@ return [
 #                    <br>",
     "info_time" => "
                     <p>
-                        📅Når: 1.-24.desember<br>
-                        ⏰Tidspunkt: Nye oppgaver hver dag kl. 07:00<br>
-                        🏆Premie til vinneren og en tilfeldig deltaker<br>
+                        📅Når: fre 11. april - søn 20.april<br>
+                        ⏰Tidspunkt: Nye oppgaver hver dag kl. 10:00<br>
+                        🏆Gavekort til vinneren og en tilfeldig deltaker<br>
+                        🕵️‍♂️Avsluttes med påskekrim! Klarer du å løse mysteriet?
                     </p>",
     "info_prices" => "
                     <p>
                         <b>Premier:</b><br>
-                        Kanskje blir det premier i år også, den beste premien er uansett skrytepoeng.
+                        Vi har blitt sponset med to gavekort på kr 400 til vinneren og en tilfeldig valgt deltaker.
                         Vinneren er deltakeren med flest poeng. Ved lik sum: raskeste svar på alle oppgavene tilsammen.
                         En tilfeldig deltaker trekkes fra alle løste oppgaver, uansett poengsum. Hver løste oppgave gir ett lodd i trekningen.<br>
-                        Oppgavene kan besvares frem til kalenderen avsluttes 26. desember kl. 23:59. <a href=\"winners.php\">Vinnere</a>
+                        Oppgavene kan besvares frem til kalenderen avsluttes 21. april kl. 23:59. <a href=\"winners.php\">Vinnere</a>
                     </p>",
     "info_points" => "
                     <p>
                         <b>Slik fungerer poengene:</b><br>
                         - Hver oppgave har en poengverdi.<br>
-                        - Hint 1: Bruk av dette reduserer poengverdien med 1 poeng.<br>
+                        - Hint 1: Bruk av dette reduserer poengverdien med 5 poeng.<br>
                         - Hint 2: Avslører du dette, mister oppgaven all poengverdi, da det gir en nesten fullstendig løsning.
-                        <i>Nytt i år er at Hint 1 trekker kun 1 poeng, mot tidligere 5.</i>
                     </p>",
     "info_groups" => "
                     <p>
