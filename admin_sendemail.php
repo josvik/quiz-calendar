@@ -96,7 +96,7 @@ if (isset($_POST['mailsubject']) && isset($_POST['mailContent'])) {
   <label>Mottakere</label>
   <ul>
   <?php foreach ($allusers as &$user) { ?>
-    <li><input type="checkbox" name="userid[]" value="<?php echo $user->id; ?>"><?php echo $user->email . " - " . $user->name; ?></li>
+    <li><input type="checkbox" name="userid[]" <?php if ($user->sendemail) echo 'checked'; ?> value="<?php echo $user->id; ?>"><?php echo $user->email . " - " . $user->name; ?></li>
   <?php } ?>
   </ul>
 </div>
