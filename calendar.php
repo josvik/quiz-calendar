@@ -153,9 +153,9 @@ if (!$logged_in)
               $task_answer->correct_answer_sec = $task_answer->correct_answer_time - $task->release_time;
                 $task_answer->score = $task->value;
                 if ($task_answer->show_hint2 > 0)
-                  $task_answer->score = 0;
-                else if ($task_answer->show_hint1 > 0)
                   $task_answer->score = max($task_answer->score - 5, 0);
+                else if ($task_answer->show_hint1 > 0)
+                  $task_answer->score = max($task_answer->score - 1, 0);
                 R::store($task_answer);
 
                 $content .= "
@@ -190,9 +190,9 @@ if (!$logged_in)
 
       $task_value = $task->value;
       if ($task_answer->show_hint1 > 0)
-        $task_value = max($task_value - 5, 0);
+        $task_value = max($task_value - 1, 0);
       if ($task_answer->show_hint2 > 0)
-        $task_value = 0;
+        $task_value = max($task_value - 5, 0);
       
       $taskcorrect = "";
       $disabled_answer = "";
@@ -306,12 +306,12 @@ if (!$logged_in)
             <br>
             <hr>
             <div>
-              <h2 class=\"content-subhead\">Hint 1 (-5 poeng)</h2>
+              <h2 class=\"content-subhead\">Hint 1 (-1 poeng)</h2>
 ";
       if ($task_answer->show_hint1 > 0)
       {
         $content .= "              <a id=\"hint1\"><p>$task->hint1</p></a>
-              <h2 class=\"content-subhead\">Hint 2 (0 poeng)</h2>\n";
+              <h2 class=\"content-subhead\">Hint 2 (-5 poeng)</h2>\n";
         if ($task_answer->show_hint2 > 0){
           $content .= "              <a id=\"hint2\"><p>$task->hint2</p></a>\n";
         }

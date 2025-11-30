@@ -44,8 +44,8 @@ return [
                         <b>Slik fungerer poengene:</b><br>
                         - Hver oppgave har en poengverdi.<br>
                         - Hint 1: Bruk av dette reduserer poengverdien med 1 poeng.<br>
-                        - Hint 2: Avslører du dette, mister oppgaven all poengverdi, da det gir en nesten fullstendig løsning.
-                        <i>Nytt i år er at Hint 1 trekker kun 1 poeng, mot tidligere 5.</i>
+                        - Hint 2: Avslører du dette, mister oppgaven 5 poeng, da det gir en nesten fullstendig løsning.<br>
+                        <i>Nytt i år er at Hint 1 kun trekker 1 poeng, og hint 2 kun 5 poeng.</i>
                     </p>",
     "info_groups" => "
                     <p>
