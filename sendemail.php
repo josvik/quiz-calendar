@@ -33,7 +33,7 @@ function sendLogin($user) {
         $login_url .= "&joingroup=" . $_GET["joingroup"];
     $subject = 'Velkommen til Quiz-kalender - Logg inn her';
     $content = "<h3>Hei " . $user->newname . "</h3>
-        <p>Velkommen til quiz-kalenderen i påsken 2025! 🐣✨</p>
+        <p>Velkommen til quiz-kalender 🎅</p>
         <p>For å logge inn, bruk lenken nedenfor:</p>
         <p><a href=\"" . $login_url . "\">" . $login_url . "</a></p>
         <p>Du kan også bruke denne lenken fra andre enheter.<br>
@@ -42,7 +42,7 @@ function sendLogin($user) {
         <p><b>🏅 Konkurrer i bander!</b><br>
         Gjør quizen enda morsommere ved å konkurrere sammen med venner, kollegaer eller familien.<br>
         Opprett eller bli med i en bande på Profil-siden, og se hvem som blir den beste!</p>
-        <p>Lykke til – og husk å sjekke dagens oppgave hver dag i påsken! 🐥</p>
+        <p>Lykke til – og husk å sjekke dagens oppgave hver dag.</p>
         <hr>
         <p>Hvis du ikke har bedt om denne e-posten, kan du trygt ignorere den.</p>
         <p>Ønsker du å slette dine data? Klikk her: <a href=\"" . $deleteme_url . "\">[Slett meg]</a></p>
