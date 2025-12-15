@@ -31,4 +31,24 @@
       , [ $user_id ]);
     return $solvedtasks;
   }
+
+  function dbGetPreviousTask($task_time) {
+    $time = time();
+    return R::findOne('task' , '
+      release_time <= ?
+      AND hide_time > ?
+      AND release_time < ?
+      ORDER BY release_time DESC'
+      , [$time, $time, $task_time] );
+  }
+
+  function dbGetNextTask($task_time) {
+    $time = time();
+    return R::findOne('task' , '
+      release_time <= ?
+      AND hide_time > ?
+      AND release_time > ?
+      ORDER BY release_time ASC'
+      , [$time, $time, $task_time] );
+  }
 ?>

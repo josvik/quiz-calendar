@@ -189,10 +189,10 @@ if (!$logged_in)
       R::store($task_answer);
 
       $task_value = $task->value;
-      if ($task_answer->show_hint1 > 0)
-        $task_value = max($task_value - 1, 0);
       if ($task_answer->show_hint2 > 0)
         $task_value = max($task_value - 5, 0);
+      else if ($task_answer->show_hint1 > 0)
+        $task_value = max($task_value - 1, 0);
       
       $taskcorrect = "";
       $disabled_answer = "";
@@ -342,16 +342,16 @@ if (!$logged_in)
       $content .= "            </div>
           </div>\n";
       
-      $previous_task = R::findOne('task' , ' release_time <= ? AND release_time < ? ORDER BY release_time DESC', [time(), $task->release_time] );
-      $next_task = R::findOne('task' , ' release_time <= ? AND release_time > ? ORDER BY release_time ASC', [time(), $task->release_time] );
+      $previous_task = dbGetPreviousTask($task->release_time);
+      $next_task = dbGetNextTask($task->release_time);
       $content .= "<div class=\"content\">";
       $content .= "            <br>\n";
       $content .= "            <hr>\n";
       $content .= "            <br>\n";
       if ($previous_task != null)
-        $content .= "<form method=\"GET\"><input type=\"hidden\" name=\"dag\" value=\"" . $previous_task->day . "\"><button class=\"pure-button\" style=\"float: left; width: 49%; max-width: 150px; padding: 20px; text-align: center;\">" . $previous_task->day . "</button>";
+        $content .= "<form method=\"GET\"><input type=\"hidden\" name=\"dag\" value=\"" . $previous_task->day . "\"><button class=\"pure-button\" style=\"float: left; width: 49%; max-width: 150px; padding: 20px; text-align: center;\">" . $previous_task->day . "</button></form>";
       if ($next_task != null)
-        $content .= "<form method=\"GET\"><input type=\"hidden\" name=\"dag\" value=\"" . $next_task->day . "\"><button class=\"pure-button\" style=\"float: right; width: 49%; max-width: 150px; padding: 20px; text-align: center;\">" . $next_task->day . "</button>";
+        $content .= "<form method=\"GET\"><input type=\"hidden\" name=\"dag\" value=\"" . $next_task->day . "\"><button class=\"pure-button\" style=\"float: right; width: 49%; max-width: 150px; padding: 20px; text-align: center;\">" . $next_task->day . "</button></form>";
     }
   }
   else
