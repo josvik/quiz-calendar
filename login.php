@@ -5,6 +5,14 @@ setcookie('token', '', time()-3600);
 if (isset($_GET['authtoken']) && isset($_GET['email'])) {
   require("db.php");
   require 'common.php';
+
+  $usage = R::dispense('usage');
+  $usage->time = time();
+  $usage->ipaddr = $_SERVER['REMOTE_ADDR'];
+  $usage->url = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+  $usage->post = json_encode($_POST);
+  R::store($usage);
+
   $user = R::findOne('user', ' newauthtoken = ? AND LOWER(email) = LOWER(?)', [$_GET['authtoken'], $_GET['email']] );
   if ($user == null) {
     echo "Feil token";

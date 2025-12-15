@@ -49,15 +49,15 @@ if (isset($_GET["task_id"])){
         $hint1time = "";
         $hint2time = "";
         if ($taskanswer['opened_time'] > 0)
-            $openedtime = date('Y-m-d H:i', $taskanswer['opened_time']);
+            $openedtime = date('Y-m-d H:i:s', $taskanswer['opened_time']);
         if ($taskanswer['correct_answer_time'] > 0)
-            $answertime = date('Y-m-d H:i', $taskanswer['correct_answer_time']);
+            $answertime = date('Y-m-d H:i:s', $taskanswer['correct_answer_time']);
         if ($taskanswer['correct_answerextra_time'] > 0)
-            $answerextratime = date('Y-m-d H:i', $taskanswer['correct_answerextra_time']);
+            $answerextratime = date('Y-m-d H:i:s', $taskanswer['correct_answerextra_time']);
         if ($taskanswer['show_hint1'] > 0)
-            $hint1time = date('Y-m-d H:i', $taskanswer['show_hint1']);
+            $hint1time = date('Y-m-d H:i:s', $taskanswer['show_hint1']);
         if ($taskanswer['show_hint2'] > 0)
-            $hint2time = date('Y-m-d H:i', $taskanswer['show_hint2']);
+            $hint2time = date('Y-m-d H:i:s', $taskanswer['show_hint2']);
 
         if ($row % 2 == 0)
             echo "            <tr class=\"pure-table-odd\">\n";
@@ -102,7 +102,7 @@ if (isset($_GET["task_id"])){
     foreach ($wronganswers as $wronganswer) {
         $wrongtime = "";
         if ($wronganswer['wrong_time'] > 0)
-            $wrongtime = date('Y-m-d H:i', $wronganswer['wrong_time']);
+            $wrongtime = date('Y-m-d H:i:s', $wronganswer['wrong_time']);
 
         if ($row % 2 == 0)
             echo "            <tr class=\"pure-table-odd\">\n";
