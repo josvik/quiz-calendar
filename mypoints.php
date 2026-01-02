@@ -18,6 +18,10 @@ if (isset($logged_in) && $logged_in)
           </thead>
           <tbody>
 <?php
+  $showuserid = $user_id;
+  if ($is_admin && isset($_GET["user_id"])){
+    $showuserid = $_GET["user_id"];
+  }
   $activetasks = R::getAll( '
     SELECT id, day, title
     FROM task
@@ -28,7 +32,7 @@ if (isset($logged_in) && $logged_in)
     SELECT task_id, show_hint1, show_hint2, score, correct_answer_time, correct_answerextra_time, correct_answer_sec
     FROM taskanswer
     WHERE user_id = ?',
-    [$user_id] );
+    [$showuserid] );
 
   $dt = new DateTime();
   $dt->setTimezone(new DateTimeZone('Europe/Oslo'));
