@@ -23,7 +23,7 @@ if (!$logged_in){
                 <li class="pure-menu-item"><a class="pure-menu-link" href="profile.php">Profil</a></li>
 
                 <li class="pure-menu-item"><a href="scoreview.php" class="pure-menu-link">Poengtavle</a></li>
-                <!--<li class="pure-menu-item"><a href="winners.php" class="pure-menu-link">Vinnere</a></li>-->
+                <li class="pure-menu-item"><a href="winners.php" class="pure-menu-link">Vinner</a></li>
                 <li class="pure-menu-item menu-item-divided"><a href="calendar.php" class="pure-menu-link">Kalender</a></li>
 <?php
   $activetasks = dbGetActiveTasks();

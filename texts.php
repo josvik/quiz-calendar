@@ -13,18 +13,11 @@ return [
                     <p>
                         Lykke til – og ha en morsom og utfordrende adventstid! 🎅✨
                     </p>",
-    "info_winners" => "", #"
-#                    <br>
-#                    <h2>Vinner av Quiz-Kalender 2025!!</h2>
-#                    <h1></h1>
-#                    <br>
-#                    <h2>Vinner trukket fra alle oppgavene:</h2>
-#                    <h1></h1>
-#
-#                    <br>
-#                    <a href=\"winners.php\">Se trekking av vinnere</a>
-#                    <br>
-#                    <br>",
+    "info_winners" => "
+                    <br>
+                    <h2>Vinner av Quiz-Kalender 2025!!</h2>
+                    <h1>Tobz</h1>
+                    <br>",
     "info_time" => "
                     <p>
                         📅Når: 1.-24.desember<br>
