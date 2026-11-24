@@ -20,7 +20,7 @@ if (isset($logged_in) && $logged_in)
       $scoreboard = Array();
     }
 ?>
-        <h2>Poengoversikt bande: <?php print($group->name); ?></h2>
+        <h2>Poengoversikt lag: <?php print($group->name); ?></h2>
         <table class="pure-table">
           <thead>
             <tr>

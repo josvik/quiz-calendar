@@ -90,14 +90,14 @@ if (isset($logged_in) && $logged_in)
         ORDER BY avgscore DESC
     ' );
 ?>
-    <h2>Bandeoversikt</h2>
+    <h2>Lagoversikt</h2>
         <table class="pure-table">
           <thead>
             <tr>
               <th style="width:10%">#</th>
-              <th style="width:60%">Bandenavn</th>
+              <th style="width:60%">Lagnavn</th>
               <th style="width:10%">Poeng</th>
-              <th style="width:10%">Antall i banden</th>
+              <th style="width:10%">Antall i laget</th>
               <th style="width:10%">Vektet sum</th>
             </tr>
           </thead>

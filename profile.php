@@ -90,7 +90,7 @@ if (isset($_POST["savegroup"])) {
     $groupname = sanitizeInput($_POST['groupname']);
     $checkgroupname = R::findOne( 'group', ' id != ? AND name LIKE ? ', [$groupId, $groupname ] );
     if ($checkgroupname){
-        print("<div class=\"answerfeedback answerwrong\"><h3>Bandenavnet er opptatt!</h3></div>");
+        print("<div class=\"answerfeedback answerwrong\"><h3>Lagnavnet er opptatt!</h3></div>");
     } else {
         if ($groupId > 0){
             //$group = R::load( 'group', $_POST["groupid"]);
@@ -121,9 +121,9 @@ if (isset($_POST["savegroup"])) {
     R::store($user);
 }
 ?>
-          <h2 class="content-subhead">Bander</h2>
+          <h2 class="content-subhead">Lag</h2>
           <br>
-          <b>Medlem i bander:</b>
+          <b>Medlem i lag:</b>
           <br>
 <?php
 $useringroups = array();
@@ -163,7 +163,7 @@ if($group->ownerid == $user->id) {
           <br>
           <br>
           <br>
-          <b>Andre bander:</b><br>
+          <b>Andre lag:</b><br>
 <?php
 $allgroups = R::findAll( 'group' );
 foreach( $allgroups as $group ) {
@@ -187,7 +187,7 @@ foreach( $allgroups as $group ) {
 }
 ?>
       <br>
-      Lag en ny bande:<br>
+      Lag et nytt lag:<br>
       <form method="POST" class="pure-form">
           <div>
               <label for="groupname">Navn</label>

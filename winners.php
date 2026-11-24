@@ -13,25 +13,7 @@ if (!$logged_in)
 {
   echo $not_logged_in_message;
 } else {
-?>
-    <h2>Vinnere av Quiz-Kalender 2025!!</h2>
-    <h3>Vinner med flest poeng og raskeste svar på alle oppgavene tilsammen:</h3>
-    <h2>Tobz</h2>
-    <br>
-<?php
-/*    <!--<h3>Vinnere trukket fra alle løste oppgaver</h3>
-    <h2></h2>
-    <h2></h2>
-    <br>
-    <p>Trekking: <br>
-    BitCoin 26.12.2024<br>
-    Laveste verdi: kr 1 083 <b>106</b><br>
-    Høyeste verdi: kr 1 133 <b>893</b><br>-->
-*/?>
-    <p>
-        Kalenderen ble avsluttet 26.desember 2025 kl 23:59.
-    </p>
-<?php
+  echo $texts["info_winners_long"];
 /*    <!--<p>
     Slik foregår trekkingen:<br>
     Korrekt svar på én oppgave gir ett lodd i trekkingen, lodd deles ut med stigende tall etter svartidspunkt. Maks antall lodd per deltaker er 27. (24 oppgaver + 3 ekstraoppgaver)<br>

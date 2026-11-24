@@ -39,9 +39,9 @@ function sendLogin($user) {
         <p>Du kan også bruke denne lenken fra andre enheter.<br>
             Når du har logget inn én gang, forblir du innlogget i 30 dager
             og kan enkelt gå til <a href=\"" . $base_url . "\">" . $base_url . "</a> for å sjekke dagens oppgave. <br></p>
-        <p><b>🏅 Konkurrer i bander!</b><br>
+        <p><b>🏅 Konkurrer i lag!</b><br>
         Gjør quizen enda morsommere ved å konkurrere sammen med venner, kollegaer eller familien.<br>
-        Opprett eller bli med i en bande på Profil-siden, og se hvem som blir den beste!</p>
+        Opprett eller bli med i et lag på Profil-siden, og se hvem som blir den beste!</p>
         <p>Lykke til – og husk å sjekke dagens oppgave hver dag.</p>
         <hr>
         <p>Hvis du ikke har bedt om denne e-posten, kan du trygt ignorere den.</p>

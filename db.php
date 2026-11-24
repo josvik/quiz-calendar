@@ -2,9 +2,7 @@
   require 'settings.php';
   require 'RedBeanPHP/rb-sqlite.php';
   R::setup( 'sqlite:' . DATABASEFILE );
-  //require 'RedBeanPHP/rb-mysql.php';
-  //R::setup( 'mysql:host=localhost;dbname=mysqldatabase', 'username', 'password' );
-  
+
   function dbGetUser($authtoken) {
     $user = R::findOne('user', ' authtoken = ?', [$authtoken] );
     return $user;
